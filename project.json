@@ -7,7 +7,7 @@
     "noCache" : false,
     "id" : "gameCanvas",
     "renderMode" : 0,
-    "engineDir":"web/",
+    "engineDir":"cocos2d-x-web/web",
 
     "modules" : ["cocos2d", "extensions"],
 
