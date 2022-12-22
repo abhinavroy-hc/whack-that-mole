@@ -3,8 +3,8 @@ var music_playing = true;
 var score = 0;
 var mole_out_len = 35;
 var mole_out_factor = 10;
-const mole_speed = 0.7;
-const button_color = "#0066ff";
+var mole_speed = 0.7;
+var button_color = "#0066ff";
 var score_text = null;
 
 var GameScreenLayer = cc.LayerColor.extend({
@@ -29,7 +29,7 @@ var GameScreenLayer = cc.LayerColor.extend({
 
 		score_text = new ccui.Text();
 		score_text.attr({
-			string: `Score ${score}`,
+			string: "Score " + score,
 			fontName: "Arial",
 			fontSize: 32,
 			x: size.width - 200,
@@ -49,7 +49,7 @@ var GameScreenLayer = cc.LayerColor.extend({
 			[-200, 0]
 		];
 		
-		for (let i = 0; i < hole_locations.length; i++) {
+		for (var i = 0; i < hole_locations.length; i++) {
 			var hole_back = new cc.Sprite(res.hole_back_png);
 			hole_back.x = size.width / 2 + hole_locations[i][0];
 			hole_back.y = size.height / 2 + hole_locations[i][1];
@@ -70,7 +70,7 @@ var GameScreenLayer = cc.LayerColor.extend({
 			mole.setEnabled(false);
 			mole_sprites.push(mole);
 
-			let hide = new cc.Sprite(res.green_png);
+			var hide = new cc.Sprite(res.green_png);
 			hide.x = size.width / 2 + hole_locations[i][0];
 			hide.y = size.height / 2 + hole_locations[i][1] - mole_out_len - 5;
 			hide.setScale(0.2);
@@ -99,7 +99,7 @@ var GameScreenLayer = cc.LayerColor.extend({
 				randomMole.setVisible(false);
 			});
 
-			var mole_up = new cc.MoveBy(mole_speed, cc.p(0, mole_out_len + mole_out_factor))
+			var mole_up = new cc.MoveBy(mole_speed, cc.p(0, mole_out_len + mole_out_factor));
 			var mole_down = new cc.MoveBy(mole_speed, cc.p(0, -(mole_out_len + mole_out_factor)));
 			var mole_sequence = new cc.Sequence(showAction, mole_up, mole_down, hideAction);
 			randomMole.runAction(mole_sequence);
@@ -116,7 +116,7 @@ var GameScreenLayer = cc.LayerColor.extend({
 		layout.setTag(12);
 		this.addChild(layout);
 
-		var finishBtn = new ccui.Button()
+		var finishBtn = new ccui.Button();
 		finishBtn.titleText = "Finish";
 		finishBtn.titleFontSize = 25;
 		finishBtn.setPosition(layout.width / 2.0, layout.height / 2.0);
@@ -159,7 +159,7 @@ var GameScreenLayer = cc.LayerColor.extend({
 		if(type == ccui.Widget.TOUCH_BEGAN){
 			cc.audioEngine.playEffect(res.whack_sound);
 			score++;
-			score_text.string = `Score ${score}`;
+			score_text.string = "Score " + score;
 		}
 	}
 });
@@ -171,8 +171,8 @@ var GameScreenScene = cc.Scene.extend({
 		if(!GAME_INITIALIZE){
 			GAME_INITIALIZE = true;
 			var layer = new GameScreenLayer();
-			const purple = "#472183";
-			const green  = "#059344";
+			var purple = "#472183";
+			var green  = "#059344";
 			layer.setColor(cc.color(green));
 			this.addChild(layer);
 		}

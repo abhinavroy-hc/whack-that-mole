@@ -20,7 +20,7 @@ var ResultScreenLayer = cc.LayerColor.extend({
 
 		var score_text = new ccui.Text();
 		score_text.attr({
-			string: `Total Score: ${score}`,
+			string: "Total Score: " + score,
 			fontName: "Arial",
 			fontSize: 32,
 			x: size.width / 2,
@@ -38,7 +38,7 @@ var ResultScreenLayer = cc.LayerColor.extend({
 		layout.setTag(12);
 		this.addChild(layout);
 
-		var button = new ccui.Button()
+		var button = new ccui.Button();
 		button.titleText = "Retry";
 		button.titleFontSize = 25;
 		button.setPosition(layout.width / 2.0, layout.height / 2.0);
@@ -50,7 +50,7 @@ var ResultScreenLayer = cc.LayerColor.extend({
 	touchEvent: function (sender, type) {
 		if(type == ccui.Widget.TOUCH_BEGAN){
 			score = 0;
-			score_text.string = `Score ${score}`;
+			score_text.string = "Score " + score;
 			cc.director.popScene();
 		}
 	}
