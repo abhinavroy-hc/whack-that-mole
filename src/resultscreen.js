@@ -20,7 +20,7 @@ var ResultScreenLayer = cc.LayerColor.extend({
 
 		var score_text = new ccui.Text();
 		score_text.attr({
-			string: "Total Score: " + score,
+			string: "Total Score: " + score +" in " + (Math.floor(timer / 60).toString()).padStart(2, '0') + " : " + (Math.floor(timer % 60).toString()).padStart(2, '0'),
 			fontName: "Arial",
 			fontSize: 32,
 			x: size.width / 2,
@@ -50,6 +50,10 @@ var ResultScreenLayer = cc.LayerColor.extend({
 	touchEvent: function (sender, type) {
 		if(type == ccui.Widget.TOUCH_BEGAN){
 			score = 0;
+			timer = 0;
+			minutes = 0;
+			seconds = 0;
+			timer_text.string = "00 : 00";
 			score_text.string = "Score " + score;
 			cc.director.popScene();
 		}

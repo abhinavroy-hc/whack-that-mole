@@ -7,6 +7,10 @@ var mole_speed = 1.0;
 var button_color = "#0066ff";
 var score_text = null;
 var topMargin = 80;
+var timer = 0;
+var timer_text = null;
+var minutes = 0;
+var seconds = 0;
 
 var GameScreenLayer = cc.LayerColor.extend({
 	volume_symbol: null,
@@ -41,6 +45,17 @@ var GameScreenLayer = cc.LayerColor.extend({
 		score_text.setColor(cc.color(255, 255, 0, 255));
 		this.addChild(score_text, 1);
 
+		timer_text = new ccui.Text();
+		timer_text.attr({
+			string: "00 : 00",
+			fontName: "Arial",
+			fontSize: 32,
+			x: size.width - 200,
+			y: size.height - 50
+		});
+		timer_text.setColor(cc.color(255, 255, 0, 255));
+		this.addChild(timer_text);
+
 		var mole_sprites = [];
 
 		var hole_locations = [
@@ -59,7 +74,12 @@ var GameScreenLayer = cc.LayerColor.extend({
 			hole_back.y = size.height / 2 + hole_locations[i][1] - topMargin;
 			this.addChild(hole_back, 0);
 
-			var hole_front = new ccui.Button(res.hole_front_png, res.hole_front_png);
+			// var hole_front = new ccui.Button(res.hole_front_png, res.hole_front_png);
+			// hole_front.x = size.width / 2 + hole_locations[i][0];
+			// hole_front.y = size.height / 2 + hole_locations[i][1] - topMargin;
+			// this.addChild(hole_front, 2);
+
+			var hole_front = new cc.Sprite(res.hole_front_png);
 			hole_front.x = size.width / 2 + hole_locations[i][0];
 			hole_front.y = size.height / 2 + hole_locations[i][1] - topMargin;
 			this.addChild(hole_front, 2);
@@ -101,6 +121,13 @@ var GameScreenLayer = cc.LayerColor.extend({
 			randomMole.runAction(mole_sequence);
 
 		}, (mole_speed * 2 + 0.5));
+
+		this.schedule(function() {
+			timer++;
+			minutes = Math.floor(timer / 60);
+			seconds = Math.floor(timer % 60);
+			timer_text.string = (minutes.toString()).padStart(2, '0') + " : " + (seconds.toString()).padStart(2, '0');
+		}, 1);
 
 		var layout = new ccui.Layout();
 		layout.setContentSize(size.width * 0.1, size.height * 0.08);
