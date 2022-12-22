@@ -3,9 +3,10 @@ var music_playing = true;
 var score = 0;
 var mole_out_len = 35;
 var mole_out_factor = 10;
-var mole_speed = 0.7;
+var mole_speed = 1.0;
 var button_color = "#0066ff";
 var score_text = null;
+var topMargin = 80;
 
 var GameScreenLayer = cc.LayerColor.extend({
 	volume_symbol: null,
@@ -17,15 +18,17 @@ var GameScreenLayer = cc.LayerColor.extend({
 
 		cc.audioEngine.setEffectsVolume(0.1);
 
-		// var top_display_text = new ccui.Text();
-		// top_display_text.attr({
-		// 	string: "Whack That Mole",
-		// 	fontName: "Arial",
-		// 	fontSize: 32,
-		// 	x: size.width / 2.0,
-		// 	y: size.height - 100
-		// });
-		// this.addChild(top_display_text);
+		var sky_layer = new cc.LayerGradient(cc.color(0, 0, 255), cc.color(255, 255, 255));
+		sky_layer.setContentSize(cc.size(size.width, size.height / 4));
+		sky_layer.x = 0;
+		sky_layer.y = size.height / 2 + size.height / 4;
+		this.addChild(sky_layer);
+
+		var sky_layer2 = new cc.LayerGradient(cc.color(255, 255, 255), cc.color(255, 255, 255, 0));
+		sky_layer2.setContentSize(cc.size(size.width, size.height / 4));
+		sky_layer2.x = 0;
+		sky_layer2.y = size.height / 2;
+		this.addChild(sky_layer2);
 
 		score_text = new ccui.Text();
 		score_text.attr({
@@ -35,7 +38,8 @@ var GameScreenLayer = cc.LayerColor.extend({
 			x: size.width - 200,
 			y: size.height - 100
 		});
-		this.addChild(score_text);
+		score_text.setColor(cc.color(255, 255, 0, 255));
+		this.addChild(score_text, 1);
 
 		var mole_sprites = [];
 
@@ -52,17 +56,17 @@ var GameScreenLayer = cc.LayerColor.extend({
 		for (var i = 0; i < hole_locations.length; i++) {
 			var hole_back = new cc.Sprite(res.hole_back_png);
 			hole_back.x = size.width / 2 + hole_locations[i][0];
-			hole_back.y = size.height / 2 + hole_locations[i][1];
+			hole_back.y = size.height / 2 + hole_locations[i][1] - topMargin;
 			this.addChild(hole_back, 0);
 
-			var hole_front = new cc.Sprite(res.hole_front_png);
+			var hole_front = new ccui.Button(res.hole_front_png, res.hole_front_png);
 			hole_front.x = size.width / 2 + hole_locations[i][0];
-			hole_front.y = size.height / 2 + hole_locations[i][1];
+			hole_front.y = size.height / 2 + hole_locations[i][1] - topMargin;
 			this.addChild(hole_front, 2);
 
 			var mole = new ccui.Button(res.mole_normal_png, res.mole_hit_png);
 			mole.x = size.width / 2 + hole_locations[i][0];
-			mole.y = size.height / 2 + hole_locations[i][1] - mole_out_len;
+			mole.y = size.height / 2 + hole_locations[i][1] - mole_out_len - topMargin;
 			mole.setLocalZOrder(1);
 			this.addChild(mole);
 
@@ -70,18 +74,11 @@ var GameScreenLayer = cc.LayerColor.extend({
 			mole.setEnabled(false);
 			mole_sprites.push(mole);
 
-			var hide = new cc.Sprite(res.green_png);
+			var hide = new ccui.Button(res.green_png, res.green_png);
 			hide.x = size.width / 2 + hole_locations[i][0];
-			hide.y = size.height / 2 + hole_locations[i][1] - mole_out_len - 5;
+			hide.y = size.height / 2 + hole_locations[i][1] - mole_out_len - 5 - topMargin;
 			hide.setScale(0.2);
 			this.addChild(hide, 3);
-
-			// cc.eventManager.addListener({
-			// 	event: cc.EventListener.MOUSE,
-			// 	onMouseDown: function (event) {
-			// 		event.stopPropagation();
-			// 	}
-			// }, hide);
 		}
 		
 		this.schedule(function () {
@@ -91,17 +88,16 @@ var GameScreenLayer = cc.LayerColor.extend({
 
 			var showAction = cc.callFunc(function() {
 				randomMole.setEnabled(true);
-				randomMole.setVisible(true);
 			});
 
 			var hideAction = cc.callFunc(function() {
 				randomMole.setEnabled(false);
-				randomMole.setVisible(false);
 			});
 
 			var mole_up = new cc.MoveBy(mole_speed, cc.p(0, mole_out_len + mole_out_factor));
+			var delay = new cc.delayTime(0.5);
 			var mole_down = new cc.MoveBy(mole_speed, cc.p(0, -(mole_out_len + mole_out_factor)));
-			var mole_sequence = new cc.Sequence(showAction, mole_up, mole_down, hideAction);
+			var mole_sequence = new cc.Sequence(showAction, mole_up, delay, mole_down, hideAction);
 			randomMole.runAction(mole_sequence);
 
 		}, (mole_speed * 2 + 0.5));
@@ -123,9 +119,6 @@ var GameScreenLayer = cc.LayerColor.extend({
 		finishBtn.addTouchEventListener(this.finishBtnEvent, this);
 		layout.addChild(finishBtn);
 
-		cc.audioEngine.playMusic(res.level_music, true);
-		cc.audioEngine.setMusicVolume(0.1);
-
 		this.volume_symbol = new ccui.Button(res.volume_png, res.volume_png);
 		this.volume_symbol.x = size.width - 80;
 		this.volume_symbol.y = 60;
@@ -136,12 +129,14 @@ var GameScreenLayer = cc.LayerColor.extend({
 
 		return true;
 	},
+	
 	finishBtnEvent: function (sender, type) {
 		if(type == ccui.Widget.TOUCH_BEGAN){
 			var scene = new ResultScreenLayerScene();
 			cc.director.pushScene(scene);
 		}
 	},
+
 	volumeBtn: function (sender, type) {
 		if(type == ccui.Widget.TOUCH_BEGAN){
 			if (music_playing) {
@@ -155,10 +150,14 @@ var GameScreenLayer = cc.LayerColor.extend({
 			music_playing = !music_playing;
 		}
 	},
+
 	scoreFunc: function (sender, type) {
 		if(type == ccui.Widget.TOUCH_BEGAN){
 			cc.audioEngine.playEffect(res.whack_sound);
 			score++;
+			if(mole_speed > 0.5 && (mole_speed - parseInt(score / 10) * 0.1) > 0.2){
+				mole_speed -= (parseInt(score / 10) * 0.1);
+			}
 			score_text.string = "Score " + score;
 		}
 	}

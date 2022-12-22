@@ -24,6 +24,8 @@ var MenuLayer = cc.Layer.extend({
 	},
 	play: function (sender, type) {
 		if(type == ccui.Widget.TOUCH_BEGAN){
+			cc.audioEngine.playMusic(res.level_music, true);
+			cc.audioEngine.setMusicVolume(0.1);
 			var scene = new GameScreenScene();
 			cc.director.pushScene(scene);
 		}
