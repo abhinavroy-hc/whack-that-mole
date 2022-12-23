@@ -20,7 +20,7 @@ var ResultScreenLayer = cc.LayerColor.extend({
 
 		var score_text = new ccui.Text();
 		score_text.attr({
-			string: "Total Score: " + score +" in " + (Math.floor(timer / 60).toString()).padStart(2, '0') + " : " + (Math.floor(timer % 60).toString()).padStart(2, '0'),
+			string: "Total Score: " + score +" in " + padStart((Math.floor(timer / 60) + ""), 2, '0') + " : " + padStart((Math.floor(timer % 60) + ""), 2, '0'),
 			fontName: "Arial",
 			fontSize: 32,
 			x: size.width / 2,

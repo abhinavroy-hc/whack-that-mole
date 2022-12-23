@@ -115,9 +115,15 @@ var GameScreenLayer = cc.LayerColor.extend({
 			});
 
 			var mole_up = new cc.MoveBy(mole_speed, cc.p(0, mole_out_len + mole_out_factor));
-			var delay = new cc.delayTime(0.5);
+			// var delay = new cc.delayTime(0.5);
 			var mole_down = new cc.MoveBy(mole_speed, cc.p(0, -(mole_out_len + mole_out_factor)));
-			var mole_sequence = new cc.Sequence(showAction, mole_up, delay, mole_down, hideAction);
+			var mole_sequence = new cc.Sequence(
+				showAction, 
+				mole_up, 
+				// delay, 
+				mole_down, 
+				hideAction
+			);
 			randomMole.runAction(mole_sequence);
 
 		}, (mole_speed * 2 + 0.5));
@@ -126,7 +132,7 @@ var GameScreenLayer = cc.LayerColor.extend({
 			timer++;
 			minutes = Math.floor(timer / 60);
 			seconds = Math.floor(timer % 60);
-			timer_text.string = (minutes.toString()).padStart(2, '0') + " : " + (seconds.toString()).padStart(2, '0');
+			timer_text.string = padStart((minutes + ""), 2, '0') + " : " + padStart((seconds + ""), 2, '0');
 		}, 1);
 
 		var layout = new ccui.Layout();
@@ -189,6 +195,13 @@ var GameScreenLayer = cc.LayerColor.extend({
 		}
 	}
 });
+
+var padStart = function (string, targetLength, padString) {
+  while (string.length < targetLength) {
+    string = padString + string;
+  }
+  return string;
+};
 
 var GameScreenScene = cc.Scene.extend({
 	onEnter: function () {
