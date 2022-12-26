@@ -1,9 +1,11 @@
-var RESULT_SCENE_INITIALIZE = false;
-
+/* global cc, ccui, padStart, button_color, score:true, 
+timer:true, minutes:true, seconds:true, timer_text:true, score_text:true */
 var ResultScreenLayer = cc.LayerColor.extend({
 	sprite: null,
 	text: null,
 	ctor: function () {
+		'use strict';
+
 		this._super();
 
 		var size = cc.winSize;
@@ -20,7 +22,7 @@ var ResultScreenLayer = cc.LayerColor.extend({
 
 		var score_text = new ccui.Text();
 		score_text.attr({
-			string: "Total Score: " + score +" in " + padStart((Math.floor(timer / 60) + ""), 2, '0') + " : " + padStart((Math.floor(timer % 60) + ""), 2, '0'),
+			string: "Total Score: " + score +" in " + padStart(Math.floor(timer / 60) + "", 2, '0') + " : " + padStart(Math.floor(timer % 60) + "", 2, '0'),
 			fontName: "Arial",
 			fontSize: 32,
 			x: size.width / 2,
@@ -28,27 +30,29 @@ var ResultScreenLayer = cc.LayerColor.extend({
 		});
 		this.addChild(score_text);
 
-		var layout = new ccui.Layout();
-		layout.setContentSize(size.width * 0.1, size.height * 0.08);
-		layout.setBackGroundColorType(ccui.Layout.BG_COLOR_SOLID);
-		layout.setBackGroundColor(cc.color(button_color));
-		layout.setBackGroundColorOpacity(100);
-		layout.setPosition(size.width / 2, 200);
-		layout.setAnchorPoint(0.5, 0.5);
-		layout.setTag(12);
-		this.addChild(layout);
+		var btn_layout = new ccui.Layout();
+		btn_layout.setContentSize(size.width * 0.1, size.height * 0.08);
+		btn_layout.setBackGroundColorType(ccui.Layout.BG_COLOR_SOLID);
+		btn_layout.setBackGroundColor(cc.color(button_color));
+		btn_layout.setBackGroundColorOpacity(100);
+		btn_layout.setPosition(size.width / 2, 200);
+		btn_layout.setAnchorPoint(0.5, 0.5);
+		btn_layout.setTag(12);
+		this.addChild(btn_layout);
 
-		var button = new ccui.Button();
-		button.titleText = "Retry";
-		button.titleFontSize = 25;
-		button.setPosition(layout.width / 2.0, layout.height / 2.0);
-		button.addTouchEventListener(this.touchEvent, this);
-		layout.addChild(button);
+		var retry_btn = new ccui.Button();
+		retry_btn.titleText = "Retry";
+		retry_btn.titleFontSize = 25;
+		retry_btn.setPosition(btn_layout.width / 2.0, btn_layout.height / 2.0);
+		retry_btn.addTouchEventListener(this.touchEvent, this);
+		btn_layout.addChild(retry_btn);
 
 		return true;
 	},
 	touchEvent: function (sender, type) {
-		if(type == ccui.Widget.TOUCH_BEGAN){
+		'use strict';
+		
+		if(type === ccui.Widget.TOUCH_BEGAN){
 			score = 0;
 			timer = 0;
 			minutes = 0;
@@ -60,8 +64,11 @@ var ResultScreenLayer = cc.LayerColor.extend({
 	}
 });
 
+/* exported ResultScreenLayerScene */
 var ResultScreenLayerScene = cc.Scene.extend({
 	onEnter: function () {
+		'use strict';
+
 		this._super();
 		var layer = new ResultScreenLayer();
 		layer.setColor(cc.color("#472183"));

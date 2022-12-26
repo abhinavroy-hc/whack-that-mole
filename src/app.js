@@ -1,13 +1,18 @@
+/* global cc, ccui, res, GameScreenScene */
 var MENU_INITIALIZE = false;
 
 var MenuLayer = cc.Layer.extend({
 	sprite: null,
 	ctor: function () {
+		'use strict';
+
 		this._super();
 		var size = cc.winSize;
+		var screenSize = cc.view.getFrameSize();
 
 		var title_screen = new cc.Sprite(res.title_screen_png);
 		title_screen.setScale(1.35);
+		// title_screen.setContentSize(cc.size(title_screen.width, screenSize.height));
 		title_screen.x = size.width / 2;
 		title_screen.y = size.height / 2;
 		this.addChild(title_screen, 0);
@@ -23,19 +28,24 @@ var MenuLayer = cc.Layer.extend({
 		return true;
 	},
 	play: function (sender, type) {
-		if(type == ccui.Widget.TOUCH_BEGAN){
-			cc.audioEngine.playMusic(res.level_music, true);
-			cc.audioEngine.setMusicVolume(0.1);
+		'use strict';
+
+		if(type === ccui.Widget.TOUCH_BEGAN){
 			var scene = new GameScreenScene();
 			cc.director.pushScene(scene);
 		}
 	}
 });
 
+/* exported FirstScene */
 var FirstScene = cc.Scene.extend({
 	onEnter: function () {
+		'use strict';
+
 		this._super();
 		if (!MENU_INITIALIZE) {
+			cc.audioEngine.playMusic(res.level_music, true);
+			cc.audioEngine.setMusicVolume(0.1);
 			MENU_INITIALIZE = true;
 			var layer = new MenuLayer();
 			this.addChild(layer);

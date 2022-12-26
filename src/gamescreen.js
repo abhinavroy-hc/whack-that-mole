@@ -1,3 +1,4 @@
+/* global cc, ccui, res, ResultScreenLayerScene */
 var GAME_INITIALIZE = false;
 var music_playing = true;
 var score = 0;
@@ -11,11 +12,25 @@ var timer = 0;
 var timer_text = null;
 var minutes = 0;
 var seconds = 0;
+var btn_width_factor = 0.1;
+var btn_height_factor = 0.08;
+
+
+var padStart = function (string, targetLength, padString) {
+	'use strict';
+
+  while (string.length < targetLength) {
+    string = padString + string;
+  }
+  return string;
+};
 
 var GameScreenLayer = cc.LayerColor.extend({
 	volume_symbol: null,
 
 	ctor: function () {
+		'use strict';
+
 		this._super();
 
 		var size = cc.winSize;
@@ -126,35 +141,40 @@ var GameScreenLayer = cc.LayerColor.extend({
 			);
 			randomMole.runAction(mole_sequence);
 
-		}, (mole_speed * 2 + 0.5));
+		}, mole_speed * 2 + 0.5);
 
 		this.schedule(function() {
 			timer++;
 			minutes = Math.floor(timer / 60);
 			seconds = Math.floor(timer % 60);
-			timer_text.string = padStart((minutes + ""), 2, '0') + " : " + padStart((seconds + ""), 2, '0');
+			timer_text.string = padStart(minutes + "", 2, '0') + " : " + padStart(seconds + "", 2, '0');
 		}, 1);
 
-		var layout = new ccui.Layout();
-		layout.setContentSize(size.width * 0.1, size.height * 0.08);
-		layout.setBackGroundColorType(ccui.Layout.BG_COLOR_SOLID);
-		layout.setBackGroundColor(cc.color(button_color));
-		layout.setBackGroundColorOpacity(100);
-		layout.setPosition(size.width / 2, 60);
-		layout.setAnchorPoint(0.5, 0.5);
-		layout.setTag(12);
-		this.addChild(layout);
+		var btn_layout = new ccui.Layout();
+		if(cc.sys.isMobile){
+			btn_layout.setContentSize(size.height * btn_height_factor, size.width * btn_width_factor);
+		}
+		else{
+			btn_layout.setContentSize(size.width * btn_width_factor, size.height * btn_height_factor);
+		}
+		btn_layout.setBackGroundColorType(ccui.Layout.BG_COLOR_SOLID);
+		btn_layout.setBackGroundColor(cc.color(button_color));
+		btn_layout.setBackGroundColorOpacity(100);
+		btn_layout.setPosition(size.width / 2, 75);
+		btn_layout.setAnchorPoint(0.5, 0.5);
+		btn_layout.setTag(12);
+		this.addChild(btn_layout);
 
-		var finishBtn = new ccui.Button();
-		finishBtn.titleText = "Finish";
-		finishBtn.titleFontSize = 25;
-		finishBtn.setPosition(layout.width / 2.0, layout.height / 2.0);
-		finishBtn.addTouchEventListener(this.finishBtnEvent, this);
-		layout.addChild(finishBtn);
+		var finish_btn = new ccui.Button();
+		finish_btn.titleText = "Finish";
+		finish_btn.titleFontSize = 25;
+		finish_btn.setPosition(btn_layout.width / 2.0, btn_layout.height / 2.0);
+		finish_btn.addTouchEventListener(this.finish_btnEvent, this);
+		btn_layout.addChild(finish_btn);
 
 		this.volume_symbol = new ccui.Button(res.volume_png, res.volume_png);
 		this.volume_symbol.x = size.width - 80;
-		this.volume_symbol.y = 60;
+		this.volume_symbol.y = 70;
 		this.volume_symbol.setScale(0.2);
 		this.volume_symbol.setTag(1);
 		this.volume_symbol.addTouchEventListener(this.volumeBtn, this);
@@ -164,14 +184,18 @@ var GameScreenLayer = cc.LayerColor.extend({
 	},
 	
 	finishBtnEvent: function (sender, type) {
-		if(type == ccui.Widget.TOUCH_BEGAN){
+		'use strict';
+
+		if(type === ccui.Widget.TOUCH_BEGAN){
 			var scene = new ResultScreenLayerScene();
 			cc.director.pushScene(scene);
 		}
 	},
 
 	volumeBtn: function (sender, type) {
-		if(type == ccui.Widget.TOUCH_BEGAN){
+		'use strict';
+
+		if(type === ccui.Widget.TOUCH_BEGAN){
 			if (music_playing) {
 				this.volume_symbol.loadTextures(res.mute_png, res.mute_png);
 				cc.audioEngine.pauseMusic();
@@ -185,32 +209,30 @@ var GameScreenLayer = cc.LayerColor.extend({
 	},
 
 	scoreFunc: function (sender, type) {
-		if(type == ccui.Widget.TOUCH_BEGAN){
+		'use strict';
+
+		if(type === ccui.Widget.TOUCH_BEGAN){
 			cc.audioEngine.playEffect(res.whack_sound);
 			score++;
-			if(mole_speed > 0.5 && (mole_speed - parseInt(score / 10) * 0.1) > 0.2){
-				mole_speed -= (parseInt(score / 10) * 0.1);
+			if(mole_speed > 0.5 && mole_speed - parseInt(score / 10) * 0.1 > 0.2){
+				mole_speed -= parseInt(score / 10) * 0.1;
 			}
 			score_text.string = "Score " + score;
 		}
 	}
 });
 
-var padStart = function (string, targetLength, padString) {
-  while (string.length < targetLength) {
-    string = padString + string;
-  }
-  return string;
-};
-
+/* exported GameScreenScene */
 var GameScreenScene = cc.Scene.extend({
 	onEnter: function () {
+		'use strict';
+
 		this._super();
 		score = 0;
 		if(!GAME_INITIALIZE){
 			GAME_INITIALIZE = true;
 			var layer = new GameScreenLayer();
-			var purple = "#472183";
+			// var purple = "#472183";
 			var green  = "#059344";
 			layer.setColor(cc.color(green));
 			this.addChild(layer);
