@@ -169,7 +169,7 @@ var GameScreenLayer = cc.LayerColor.extend({
 		finish_btn.titleText = "Finish";
 		finish_btn.titleFontSize = 25;
 		finish_btn.setPosition(btn_layout.width / 2.0, btn_layout.height / 2.0);
-		finish_btn.addTouchEventListener(this.finish_btnEvent, this);
+		finish_btn.addTouchEventListener(this.finishBtnEvent, this);
 		btn_layout.addChild(finish_btn);
 
 		this.volume_symbol = new ccui.Button(res.volume_png, res.volume_png);
