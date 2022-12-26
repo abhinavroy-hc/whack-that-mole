@@ -14,6 +14,8 @@ var minutes = 0;
 var seconds = 0;
 var btn_width_factor = 0.1;
 var btn_height_factor = 0.08;
+var mole_delay = 0.5;
+var delay_dec_flag = 1;
 
 
 var padStart = function (string, targetLength, padString) {
@@ -130,18 +132,18 @@ var GameScreenLayer = cc.LayerColor.extend({
 			});
 
 			var mole_up = new cc.MoveBy(mole_speed, cc.p(0, mole_out_len + mole_out_factor));
-			// var delay = new cc.delayTime(0.5);
+			var delay = new cc.DelayTime(mole_delay);
 			var mole_down = new cc.MoveBy(mole_speed, cc.p(0, -(mole_out_len + mole_out_factor)));
 			var mole_sequence = new cc.Sequence(
 				showAction, 
 				mole_up, 
-				// delay, 
+				delay,
 				mole_down, 
 				hideAction
 			);
 			randomMole.runAction(mole_sequence);
 
-		}, mole_speed * 2 + 0.5);
+		}, mole_speed * 2 + mole_delay);
 
 		this.schedule(function() {
 			timer++;
@@ -214,6 +216,10 @@ var GameScreenLayer = cc.LayerColor.extend({
 		if(type === ccui.Widget.TOUCH_BEGAN){
 			cc.audioEngine.playEffect(res.whack_sound);
 			score++;
+			if(delay_dec_flag !== parseInt(score / 10) && mole_delay > 0 && mole_delay-0.1 >= 0){
+				mole_delay -= 0.1;
+				delay_dec_flag = parseInt(score / 10);
+			}
 			if(mole_speed > 0.5 && mole_speed - parseInt(score / 10) * 0.1 > 0.2){
 				mole_speed -= parseInt(score / 10) * 0.1;
 			}

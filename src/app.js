@@ -10,7 +10,7 @@ var MenuLayer = cc.Layer.extend({
 		this._super();
 		var size = cc.winSize;
 		var screenSize = cc.view.getFrameSize();
-		// cc.log(screenSize);
+		
 		// 243
 		var scale_factor = 1.35;
 		if(cc.sys.isMobile){
@@ -18,15 +18,12 @@ var MenuLayer = cc.Layer.extend({
 		}
 		
 		var title_screen = new cc.Sprite(res.title_screen_png);
-		// title_screen.setScale(1.35);
 		title_screen.setScale(scale_factor);
-		// title_screen.setContentSize(cc.size(title_screen.width, screenSize.height));
 		title_screen.x = size.width / 2;
 		title_screen.y = size.height / 2;
 		this.addChild(title_screen, 0);
 
 		var play_button = new ccui.Button(res.play_btn_png, res.play_btn_inv_png);
-		// play_button.setScale(1.35);
 		play_button.setScale(scale_factor);
 		play_button.x = size.width / 2 - 10;
 		play_button.y = size.height / 2 - scale_factor * play_btn_h_factor;
