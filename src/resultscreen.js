@@ -1,4 +1,4 @@
-/* global cc, ccui, padStart, button_color, score:true, 
+/* global cc, ccui, padStart, button_color, btn_height_factor, btn_width_factor,score:true, 
 timer:true, minutes:true, seconds:true, timer_text:true, score_text:true */
 var ResultScreenLayer = cc.LayerColor.extend({
 	sprite: null,
@@ -31,7 +31,12 @@ var ResultScreenLayer = cc.LayerColor.extend({
 		this.addChild(score_text);
 
 		var btn_layout = new ccui.Layout();
-		btn_layout.setContentSize(size.width * 0.1, size.height * 0.08);
+		if(cc.sys.isMobile){
+			btn_layout.setContentSize(size.height * btn_height_factor, size.width * btn_width_factor);
+		}
+		else{
+			btn_layout.setContentSize(size.width * btn_width_factor, size.height * btn_height_factor);
+		}
 		btn_layout.setBackGroundColorType(ccui.Layout.BG_COLOR_SOLID);
 		btn_layout.setBackGroundColor(cc.color(button_color));
 		btn_layout.setBackGroundColorOpacity(100);

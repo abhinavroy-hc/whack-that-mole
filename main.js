@@ -30,7 +30,7 @@ cc.game.onStart = function(){
     var sys = cc.sys;
     
     var portrait_style = game.res.data.config.portrait;
-    // var landscape_style = game.res.data.config.landscape;
+    var landscape_style = game.res.data.config.landscape;
     
     if(!sys.isNative && document.getElementById("cocosLoading")){ //If referenced loading.js, please remove it
         document.body.removeChild(document.getElementById("cocosLoading"));
@@ -44,21 +44,21 @@ cc.game.onStart = function(){
         sys.browserType !== sys.BROWSER_TYPE_BAIDU &&
         sys.browserType !== sys.BROWSER_TYPE_WECHAT) {
         cc.view.enableAutoFullScreen(true);
-        // cc.view.setOrientation(cc.ORIENTATION_PORTRAIT);
-        // cc.view.setDesignResolutionSize(portrait_style.bound_width, portrait_style.bound_height, cc.ResolutionPolicy.FIXED_WIDTH);
+        cc.view.setOrientation(cc.ORIENTATION_PORTRAIT);
+        cc.view.setDesignResolutionSize(portrait_style.bound_width, portrait_style.bound_height, cc.ResolutionPolicy.FIXED_WIDTH);
     }
-    // else{
-    //     cc.view.setOrientation(cc.ORIENTATION_LANDSCAPE);
-    //     cc.view.setDesignResolutionSize(landscape_style.bound_width, landscape_style.bound_height, cc.ResolutionPolicy.SHOW_ALL);
-    // }
+    else{
+        cc.view.setOrientation(cc.ORIENTATION_LANDSCAPE);
+        cc.view.setDesignResolutionSize(landscape_style.bound_width, landscape_style.bound_height, cc.ResolutionPolicy.SHOW_ALL);
+    }
 
     // Adjust viewport meta
     cc.view.adjustViewPort(true);
 
-    cc.view.setOrientation(cc.ORIENTATION_PORTRAIT);
+    // cc.view.setOrientation(cc.ORIENTATION_PORTRAIT);
 
     // Setup the resolution policy and design resolution size
-    cc.view.setDesignResolutionSize(portrait_style.bound_width, portrait_style.bound_height, cc.ResolutionPolicy.FIXED_WIDTH);
+    // cc.view.setDesignResolutionSize(portrait_style.bound_width, portrait_style.bound_height, cc.ResolutionPolicy.FIXED_WIDTH);
 
     // Uncomment the following line to set a fixed orientation for your game
     // cc.view.setOrientation(cc.ORIENTATION_PORTRAIT);
