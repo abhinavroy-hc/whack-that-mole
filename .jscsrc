@@ -20,7 +20,7 @@
   "disallowSpacesInsideArrayBrackets": true,
   "disallowSpacesInsideObjectBrackets": true,
   "disallowSpacesInsideParentheses": true,
-  "disallowTabs": true,
+  "disallowTabs": false,
   "disallowTrailingComma": true,
   "disallowTrailingWhitespace": true,
   "disallowUnusedParams": true,
