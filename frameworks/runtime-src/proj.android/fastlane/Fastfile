@@ -1,7 +1,0 @@
-default_platform(:android)
-platform :android do
-  lane :runUnitTests do
-    # gradle(task: "clean")
-    echo 'running'
-  end
-end
