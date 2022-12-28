@@ -1,0 +1,3 @@
+for_lane 'runUnitTests' do
+  package_name("com.screengame.threescreen")
+end

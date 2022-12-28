@@ -1,0 +1,6 @@
+default_platform(:android)
+platform :android do
+  lane :runUnitTests do
+    gradle(task: "test")
+  end
+end
